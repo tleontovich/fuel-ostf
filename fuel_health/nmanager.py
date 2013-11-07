@@ -207,9 +207,9 @@ class OfficialClientManager(fuel_health.manager.Manager):
                                                auth_url=auth_url,
                                                savanna_url=savanna_url)
 
-    def _get_ceilometer_client(self, username=None, password=None):
+    def _get_ceilometer_client(self):
         keystone = self._get_identity_client()
-        endpoint=self.config.ceilometer.endpoint
+        endpoint = self.config.ceilometer.endpoint
         return ceilometerclient.v2.Client(endpoint=endpoint,
                                           token=lambda: keystone.auth_token)
 
