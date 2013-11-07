@@ -56,15 +56,10 @@ class CeilometerBaseTest(fuel_health.nmanager.OfficialClientTest):
         """
         return self.ceilometer_client.statistics.list(meter_name)
 
-    def create_sample(self, resource_id):
+    def create_sample(self, resource_id, counter_name, counter_type, counter_unit, counter_volume, resource_metadata):
         """
-            This method provide creation of sample
+        This method provide creation of sample
         """
-        counter_name = rand_name('ost1_test-sample')
-        counter_type = 'gauge'
-        counter_unit = 'B'
-        counter_volume = 1
-        resource_metadata = {"user" : "example_metadata"}
         return self.ceilometer_client.samples.create(resource_id=resource_id,
                                                      counter_name=counter_name,
                                                      counter_type=counter_type,

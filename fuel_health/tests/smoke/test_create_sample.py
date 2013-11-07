@@ -21,10 +21,10 @@ from fuel_health import nmanager
 LOG = logging.getLogger(__name__)
 
 
-""" Test module contains tests for sample creation. """
-
-
 class SampleTest(ceilometermanager.CeilometerBaseTest):
+    """
+    SampleTest contains test that check creation of sample.
+    """
 
     def test_create_sample(self):
         """Create sample metric
@@ -36,12 +36,26 @@ class SampleTest(ceilometermanager.CeilometerBaseTest):
             3. Check that the sample has the statistic.
         Duration: 40 s.
         """
+        counter_name = self.rand_name('ost1_test-sample')
+        counter_type = 'gauge'
+        counter_unit = 'B'
+        counter_volume = 1
+        resource_metadata = {"user" : "example_metadata"}
+
         fail_msg_1 = 'Sample can not be created'
+
         sample = self.verify(30, self.create_sample, 1,
                              fail_msg_1,
                              "Sample creating",
-                             nmanager.get_image_from_name())
+                             resource_id=nmanager.get_image_from_name(),
+                             counter_name=counter_name,
+                             counter_type=counter_type,
+                             counter_unit=counter_unit,
+                             counter_volume=counter_volume,
+                             resource_metadata=resource_metadata)
+
         fail_msg_2 = 'Sample resource is absent'
+
         sample_resource = self.verify_response_body_value(body_structure=sample[0].resource_id,
                                                           value=nmanager.get_image_from_name(),
                                                           msg=fail_msg_2,
