@@ -31,6 +31,10 @@ try:
 except:
     LOG.warning('Muranoclient could not be imported.')
 try:
+    import ceilometerclient.v2.client
+except:
+    LOG.warning('Ceilometer client could not be imported.')
+try:
     from fuel_health.common.utils import savanna_client_patch
     savanna_client_patch.patch_client()
 
@@ -68,6 +72,7 @@ class OfficialClientManager(fuel_health.manager.Manager):
         self.heat_client = self._get_heat_client()
         self.murano_client = self._get_murano_client()
         self.savanna_client = self._get_savanna_client()
+        self.ceilometer_client = self._get_ceilometer_client()
 
         self.client_attr_names = [
             'compute_client',
@@ -75,7 +80,8 @@ class OfficialClientManager(fuel_health.manager.Manager):
             'volume_client',
             'heat_client',
             'murano_client',
-            'savanna_client'
+            'savanna_client',
+            'ceilometer_client'
         ]
 
     def _get_compute_client(self, username=None, password=None,
@@ -201,6 +207,11 @@ class OfficialClientManager(fuel_health.manager.Manager):
                                                auth_url=auth_url,
                                                savanna_url=savanna_url)
 
+    def _get_ceilometer_client(self, username=None, password=None):
+        keystone = self._get_identity_client()
+        endpoint=self.config.ceilometer.endpoint
+        return ceilometerclient.v2.Client(endpoint=endpoint,
+                                          token=lambda: keystone.auth_token)
 
 class OfficialClientTest(fuel_health.test.TestCase):
     manager_class = OfficialClientManager
