@@ -15,6 +15,7 @@
 # under the License.
 
 import logging
+from fuel_health.common.utils.data_utils import rand_name
 from fuel_health import ceilometermanager
 from fuel_health import nmanager
 
@@ -36,7 +37,7 @@ class SampleTest(ceilometermanager.CeilometerBaseTest):
             3. Check that the sample has the statistic.
         Duration: 40 s.
         """
-        counter_name = self.rand_name('ost1_test-sample')
+        counter_name = rand_name('ost1_test-sample')
         counter_type = 'gauge'
         counter_unit = 'B'
         counter_volume = 1
