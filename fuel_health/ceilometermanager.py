@@ -67,15 +67,11 @@ class CeilometerBaseTest(fuel_health.nmanager.OfficialClientTest):
                                                      counter_volume=counter_volume,
                                                      resource_metadata=resource_metadata)
 
-    def create_alarm(self, project_id, user_id, threshold, name, meter_name):
+    def create_alarm(self, **kwargs):
         """
         This method provide creation of alarm
         """
-        return self.ceilometer_client.alarms.create(project_id=project_id,
-                                                    user_id=user_id,
-                                                    meter_name=meter_name,
-                                                    threshold=threshold,
-                                                    name=name)
+        return self.ceilometer_client.alarms.create(**kwargs)
 
     def get_alarm_id(self):
         list_alarms_resp = self.list_alarm()
