@@ -25,6 +25,8 @@ LOG = logging.getLogger(__name__)
 class SampleTest(ceilometermanager.CeilometerBaseTest):
     """
     SampleTest contains test that check creation of sample.
+    Special requirements:
+        1. Ceilometer should be installed.
     """
 
     def test_create_sample(self):

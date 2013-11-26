@@ -29,6 +29,14 @@ class TestAlarmAction(ceilometermanager.CeilometerBaseTest):
     Special requirements:
         1. Ceilometer should be installed.
     """
+    def setUp(self):
+        super(TestAlarmAction, self).setUp()
+        self.instance = object()
+
+    def tearDown(self):
+        super(TestAlarmAction, self).tearDown()
+        self.compute_client.servers.delete(self.instance)
+
 
     def _wait_for_instance_status(self, server, status):
         self.status_timeout(self.compute_client.servers, server.id, status)
@@ -45,7 +53,6 @@ class TestAlarmAction(ceilometermanager.CeilometerBaseTest):
             3. Create a new alarm on exsisting metric (instances's cpu).
             4. Wait the next polling period and state of alarm to 'alarm'.
             5. Delete the alarm.
-            6. Delete the instance.
 
         Duration: 1200 s.
         """
@@ -57,7 +64,7 @@ class TestAlarmAction(ceilometermanager.CeilometerBaseTest):
         image = nmanager.get_image_from_name()
         name = rand_name('ostf1_test_alarm_actions')
 
-        instance = self.verify(200, self.compute_client.servers.create, 1,
+        self.instance = self.verify(200, self.compute_client.servers.create, 1,
                                fail_msg,
                                "server creation",
                                name=name,
@@ -67,7 +74,7 @@ class TestAlarmAction(ceilometermanager.CeilometerBaseTest):
         self.verify(200, self._wait_for_instance_status, 2,
                     "instance is not available",
                     "instance becoming 'available'",
-                    instance, 'ACTIVE')
+                    self.instance, 'ACTIVE')
 
         fail_msg = "Creation alarm failed."
 
@@ -105,11 +112,4 @@ class TestAlarmAction(ceilometermanager.CeilometerBaseTest):
         alarm_delete_resp = self.verify(20, self.delete_alarm,
                                         5, fail_msg, "delete_alarm",
                                         alarm_id=create_alarm_resp.alarm_id)
-
-        fail_msg = "Instance can not be deleted."
-
-        self.verify(180, self.compute_client.servers.delete,
-                    6,fail_msg,
-                    'Instance deletion',
-                    instance)
 
