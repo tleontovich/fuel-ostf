@@ -62,7 +62,7 @@ class TestAlarmAction(ceilometermanager.CeilometerBaseTest):
         create_flavor_resp = self._create_nano_flavor()
         flavor = create_flavor_resp.id
         image = nmanager.get_image_from_name()
-        name = rand_name('ostf1_test_alarm_actions')
+        name = rand_name('ost1_test-instance-alarm_actions')
 
         self.instance = self.verify(200, self.compute_client.servers.create, 1,
                                fail_msg,
@@ -82,7 +82,7 @@ class TestAlarmAction(ceilometermanager.CeilometerBaseTest):
         period = '600'
         comparison_operator = 'lt'
         statistic = 'avg'
-        name = rand_name('ostf1_test_alarm_actions')
+        name = rand_name('ost1_test-alarm_actions')
 
         statistic_meter_resp = self.list_statistics(meter_name)
         threshold = statistic_meter_resp[0].avg - 1
